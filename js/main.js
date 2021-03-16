@@ -20,7 +20,7 @@ fetch('bumbeishvili.txt').then(function(response){
     return response.text();
 })
 .then(function(data){
-    wordArr = data.split('\r\n');
+    wordArr = data.split('\n');
     console.log(wordArr);
 });
 
