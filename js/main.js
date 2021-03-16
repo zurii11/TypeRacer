@@ -4,34 +4,35 @@ let word2 = document.getElementById('word2');
 let word3 = document.getElementById('word3');
 let wordsCounted = document.getElementById('wordsCounted')
 let T = document.getElementById('timer');
-let started = false;
+let started = false; // determines did the game start or not
 let wordCounter = 0;
 let timer = 60;
-let wordArr = [];
-let wtt = [];
-let cw = 0;
+let wordArr = []; // contains all words from txt
+let wtt = []; // contains 3 words for each round
+let cw = 0; // current word
 let cwa = [word1, word2, word3];
 let interval;
 
 textInput.disabled = true;
 wordsCounted.innerText = wordCounter;
 
+// gets txt and extracts data, splits it by words and gives to array
 fetch('bumbeishvili.txt').then(function(response){
     return response.text();
 })
 .then(function(data){
-    wordArr = data.split('\n');
-    console.log(wordArr);
+    wordArr = data.split('\n'); // '\n' works on github and '\r\n' works locally for some wicked reasons I don't understand
 });
 
 T.innerText = timer;
 
 textInput.addEventListener('keyup', subWord);
 
+// checks when space is pressed in input, if words is right increments wordCounter, if game has not started clears input field(better solution would be with keydown but im laze)
 function subWord(e) {
     if (started == true) {
         if (e.keyCode == 32) {
-            checkWord = textInput.value.slice(0, textInput.value.length-1);
+            checkWord = textInput.value.slice(0, textInput.value.length-1); // because keyup is used word and a space is returned, this clears the space
             
             if (checkWord == cwa[cw].innerText) {
                 textInput.value = '';
@@ -58,7 +59,7 @@ function start() {
 
     textInput.focus();
 
-    clearInterval(interval);
+    clearInterval(interval); // clear first so if function is called before interval is ended 2 or more intervals are not set at the same time, for this interval variable is declared globally
     interval = setInterval(time, 1000)
 
     function time() {
@@ -77,6 +78,8 @@ function start() {
     currentWord();
 }
 
+
+// takes 3 random words from wordArr and gives it to wtt, this is called everytime displayed words need to be changed
 function pickWords() {
     wtt = [];
 
@@ -89,6 +92,8 @@ function pickWords() {
     word3.innerText = wtt[2];
 }
 
+
+// changes the color and size of current word, this is called everytime current word needs to be determined/changed
 function currentWord() {
 
     if (cw > 2) {
